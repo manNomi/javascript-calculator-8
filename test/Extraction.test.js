@@ -1,6 +1,6 @@
 // 추출기 테스트
 
-import Extraction from '../src/service/model/Extraction';
+import Extraction from '../src/service/model/Extraction.js';
 
 describe('Extraction 클래스 테스트', () => {
   it('//ㅌ\\n 사이의 커스텀 구분자 ㅌ을 추출한다', () => {
