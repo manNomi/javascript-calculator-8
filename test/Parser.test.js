@@ -26,7 +26,7 @@ describe('Parser 클래스의 useCase를 추가하다', () => {
     expect(parser.parseData(regxs, inputText)).toEqual([4, 6]);
   });
   it('구분자에 \\ 이스케이프가 포함되는경우', () => {
-    const regxs = ['//\\n', '\\'];
+    const regxs = ['//\\\\n', '\\\\'];
     const inputText = '//\\n1//\\n2//\\n3';
     expect(parser.parseData(regxs, inputText)).toEqual([1, 2, 3]);
   });
@@ -38,4 +38,6 @@ describe('Parser 클래스의 useCase를 추가하다', () => {
 });
 
 // issue \ 처리가 매우 까다로움
-// \\ 의 경우에는
+// \\ 의 경우에는 \\\\ 로 처리해야한다
+// js에서 \는 \\로 작성해야하므로
+// 따라서 inputText의 \\는 \\\\로 처리해야하는것
