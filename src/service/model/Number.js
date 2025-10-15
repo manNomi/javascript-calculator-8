@@ -1,3 +1,11 @@
 export default class Number {
-  #numbers = [];
+  #numbers;
+
+  constructor(numbers) {
+    this.#numbers = numbers;
+  }
+
+  getAddedNumbers() {
+    return this.#numbers.reduce((acc, cur) => acc + cur);
+  }
 }
