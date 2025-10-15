@@ -9,9 +9,18 @@
 -[] 파싱된 입력이 올바른지 확인하는 기능
 -[] 파싱된 입력을 더하는 기능
 
+- Model
 - Parser : 구분자
 - Number : 입력받은 숫자
 - Extraction : 추출자
+- RandomMaker : 랜덤 제작기
+
+- View
+- InputView : 입력
+- OutputView : 출력
+
+- Controller
+- Calculator : 계산기
 
 ### - 입력 요구사항
 
@@ -37,6 +46,7 @@
 -[] 테스트 코드 랜덤 문자열 생성기 구현
 -[] MVC 패턴 적용하기
 -[] 객체지향 원칙 준수하기
+-[] AI 사용 없이 구현하기
 
 ## 4. 예상 실행 결과
 
