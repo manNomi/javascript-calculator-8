@@ -5,5 +5,10 @@ const validate = {
       if (number <= 0) throw new Error('[ERROR]');
     });
   },
+  isLong(numbers) {
+    if (numbers.length >= 50) {
+      throw new Error('[ERROR]');
+    }
+  },
 };
 export default validate;
