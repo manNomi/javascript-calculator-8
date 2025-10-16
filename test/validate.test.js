@@ -29,6 +29,6 @@ describe('잘못된 입력에 대한 검증', () => {
 
   it('음수가 입력되는 경우 ERROR', () => {
     const parseInput = [' ', '1', ' ', '1'];
-    expect(validate.isIntegers(parseInput)).not.toThrow('[ERROR]');
+    expect(validate.isIntegers(parseInput)).toThrow('[ERROR]');
   });
 });
