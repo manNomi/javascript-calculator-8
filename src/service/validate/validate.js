@@ -1,6 +1,6 @@
 const validate = {
-  isNumber(input) {
-    return !Number.isNaN(input);
+  isNumbers(numbers) {
+    return !Number.isNaN(numbers);
   },
 };
 export default validate;
