@@ -1,6 +1,9 @@
 const validate = {
-  isNumbers(numbers) {
-    return !Number.isNaN(numbers);
+  isIntegers(numbers) {
+    numbers.forEach((number) => {
+      if (Number.isNaN(number)) throw new Error('[ERROR]');
+      if (number <= 0) throw new Error('[ERROR]');
+    });
   },
 };
 export default validate;
