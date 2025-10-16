@@ -5,30 +5,30 @@ describe('잘못된 입력에 대한 검증', () => {
   // 파싱 전 - 예외
   it('연속된 구분자가 입력된 경우 ERROR', () => {
     const input = ',,123,123';
-    expect(validate.isRegexError(input)).toThrow('[ERROR]');
+    expect(() => validate.isRegexError(input)).toThrow('[ERROR]');
   });
   it('너무 긴 메시지가(50자) 입력된 경우 ERROR', () => {
     const input =
       '1234567891011122312312312312312312312312321312312312312312312313';
-    expect(validate.isLong(input)).toThrow('[ERROR]');
+    expect(() => validate.isLong(input)).toThrow('[ERROR]');
   });
 
   // 파싱 후 - 예외
   it('숫자가 아닌값이 포함된 경우 ERROR', () => {
     const parseInput = ['우', '테', '코', '1'];
-    expect(validate.isIntegers(parseInput)).toThrow('[ERROR]');
+    expect(() => validate.isIntegers(parseInput)).toThrow('[ERROR]');
   });
   it('빈 입력 이 포함된 경우 "" 빈값으로 0으로 허용', () => {
     const parseInput = ['', '1', '2', '1'];
-    expect(validate.isIntegers(parseInput)).not.toThrow('[ERROR]');
+    expect(() => validate.isIntegers(parseInput)).not.toThrow('[ERROR]');
   });
   it('공백 입력인경우 "  " 빈값으로 0으로 허용', () => {
     const parseInput = [' ', '1', ' ', '1'];
-    expect(validate.isIntegers(parseInput)).not.toThrow('[ERROR]');
+    expect(() => validate.isIntegers(parseInput)).not.toThrow('[ERROR]');
   });
 
   it('음수가 입력되는 경우 ERROR', () => {
     const parseInput = [' ', '1', ' ', '1'];
-    expect(validate.isIntegers(parseInput)).toThrow('[ERROR]');
+    expect(() => validate.isIntegers(parseInput)).toThrow('[ERROR]');
   });
 });
