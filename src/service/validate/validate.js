@@ -1,7 +1,8 @@
 const validate = {
   isIntegers(numbers) {
     numbers.forEach((number) => {
-      if (Number.isNaN(number)) throw new Error('[ERROR]');
+      if (number.trim() === '') return;
+      if (Number.isNaN(Number(number))) throw new Error('[ERROR]');
       if (number <= 0) throw new Error('[ERROR]');
     });
   },
