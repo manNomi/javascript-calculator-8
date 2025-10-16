@@ -1,10 +1,9 @@
-import inputView from './view/InputView.js';
-import outputView from './view/OutputView.js';
+import Controller from './controller/Controller.js';
 
 class App {
   async run() {
-    const input = inputView.readLineMesage('Hello World');
-    outputView.printMessage(input);
+    const controller = new Controller();
+    controller.run();
   }
 }
 
