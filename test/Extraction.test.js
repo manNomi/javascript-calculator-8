@@ -18,4 +18,10 @@ describe('Extraction 클래스 테스트', () => {
     const extraction = new Extraction();
     expect(extraction.extractCustom(inputText)).toEqual([';']);
   });
+
+  it('커스텀 구분자 두개를 테스트하다 //;\\n1', () => {
+    const inputText = '//;\\n1,//ㅁ\\n1';
+    const extraction = new Extraction();
+    expect(extraction.extractCustom(inputText)).toEqual([';', 'ㅁ']);
+  });
 });

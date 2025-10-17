@@ -1,11 +1,8 @@
-const regex = /\/\/(.*?)\\n/;
+const regex = /\/\/(.*?)\\n/g;
 
 export default class Extraction {
   extractCustom(inputText) {
-    const match = inputText.match(regex);
-    if (match) {
-      return [match[1]];
-    }
-    return [];
+    const matches = Array.from(inputText.matchAll(regex), (match) => match[1]);
+    return matches;
   }
 }
