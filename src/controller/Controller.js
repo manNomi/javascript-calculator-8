@@ -12,15 +12,20 @@ export default class Controller {
   }
 
   async run() {
-    const input =
-      await inputView.readLineMessage('덧셈할 문자열을 입력해 주세요.');
-    validate.isLong(input);
+    try {
+      const input =
+        await inputView.readLineMessage('덧셈할 문자열을 입력해 주세요.');
+      validate.isLong(input);
 
-    const customRegexs = this.extraction.extractCustom(input);
-    const parsedNumber = this.parser.parseData(customRegexs, input);
-    validate.isIntegers(parsedNumber);
+      const customRegexs = this.extraction.extractCustom(input);
+      const parsedNumber = this.parser.parseData(customRegexs, input);
+      validate.isIntegers(parsedNumber);
 
-    const numbers = new Number(parsedNumber);
-    await outputView.printMessage(`결과 : ${numbers.getAddedNumbers()}`);
+      const numbers = new Number(parsedNumber);
+      await outputView.printMessage(`결과 : ${numbers.getAddedNumbers()}`);
+    } catch (error) {
+      await outputView.printMessage(`${error.message}`);
+      throw new Error(error.message);
+    }
   }
 }
