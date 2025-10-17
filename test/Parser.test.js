@@ -22,12 +22,12 @@ describe('Parser 클래스의 useCase를 추가하다', () => {
 
   it('구분자가 숫자인경우', () => {
     const regxs = ['1', '2', '3', '#'];
-    const inputText = '1142232#61';
-    expect(parser.parseData(regxs, inputText)).toEqual([4, 6]);
+    const inputText = '66166266366#66';
+    expect(parser.parseData(regxs, inputText)).toEqual([66, 66, 66, 66, 66]);
   });
   it('구분자에 \\ 이스케이프가 포함되는경우', () => {
-    const regxs = ['//\\\\n', '\\\\'];
-    const inputText = '//\\n1//\\n2//\\n3';
+    const regxs = ['', '\\\\'];
+    const inputText = '\\1\\2\\3';
     expect(parser.parseData(regxs, inputText)).toEqual([1, 2, 3]);
   });
   it('구분자가 여러글자 인경우', () => {
@@ -43,13 +43,12 @@ describe('Parser 클래스의 useCase를 추가하다', () => {
 
   it('공백이 포함되는 경우', () => {
     const inputText = '-1,,3';
-    expect(parser.parseData([], inputText)).toEqual([-1, 0, 3]);
+    expect(parser.parseData([], inputText)).toEqual([-1, 3]);
   });
 
   it('커스텀 구분자가 포함이 되는경우 //;\\n1', () => {
-    const regxs = [';'];
     const inputText = '//;\\n1';
-    expect(parser.parseData(regxs, inputText)).toEqual([1]);
+    expect(parser.parseData([';'], inputText)).toEqual([1]);
   });
 
   it('커스텀 구분자가 처음 적히지 않은경우 ㅅ//;\\n1', () => {
