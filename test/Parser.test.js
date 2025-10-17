@@ -35,6 +35,11 @@ describe('Parser 클래스의 useCase를 추가하다', () => {
     const inputText = 'ab1bc2cd3';
     expect(parser.parseData(regxs, inputText)).toEqual([1, 2, 3]);
   });
+
+  it('음수가 포함되는 경우', () => {
+    const inputText = '-1,2,3';
+    expect(parser.parseData([], inputText)).toEqual([-1, 2, 3]);
+  });
 });
 
 // issue \ 처리가 매우 까다로움
