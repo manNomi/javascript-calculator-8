@@ -21,6 +21,6 @@ export default class Controller {
     validate.isIntegers(parsedNumber);
 
     const numbers = new Number(parsedNumber);
-    outputView.printMessage(`결과 : ${numbers.getAddedNumbers()}`);
+    await outputView.printMessage(`결과 : ${numbers.getAddedNumbers()}`);
   }
 }
