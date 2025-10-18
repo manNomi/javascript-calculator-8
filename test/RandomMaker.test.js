@@ -6,6 +6,7 @@ import path from 'path';
 import Controller from '../src/controller/Controller.js';
 import inputView from '../src/view/InputView.js';
 import Parser from '../src/service/model/Parser.js';
+import Extraction from '../src/service/model/Extraction.js';
 
 jest.mock('../src/view/InputView.js', () => ({
   __esModule: true,
@@ -45,10 +46,10 @@ const ERROR_DIR = path.join(process.cwd(), 'error_cases');
 if (!fs.existsSync(ERROR_DIR)) fs.mkdirSync(ERROR_DIR);
 const errorFilePath = path.join(ERROR_DIR, 'last_error.json');
 
-export const saveErrorCase = (input, output, parseMumber) => {
+export const saveErrorCase = (input, output, parseMumber, extracionRegex) => {
   fs.writeFileSync(
     errorFilePath,
-    JSON.stringify({ input, output, parseMumber }, null, 3),
+    JSON.stringify({ input, output, extracionRegex, parseMumber }, null, 4),
   );
 };
 const getCustomRegexWithText = (text) => `//${text}\\n`;
@@ -65,7 +66,7 @@ const makeCustomRegex = (customRegexLength) => {
     } while (charCode >= 48 && charCode <= 57);
     customRegexs.push(String.fromCharCode(charCode));
   }
-  return customRegexs;
+  return [...new Set(customRegexs)];
 };
 
 const getRandomValueInArray = (values) => {
@@ -76,7 +77,7 @@ const getRandomValueInArray = (values) => {
 const getRandomInput = () => {
   if (fs.existsSync(errorFilePath)) {
     const data = JSON.parse(fs.readFileSync(errorFilePath, 'utf-8'));
-    return [data.input, data.output, data.parseMumber];
+    return [data.input, data.output, data.parseMumber, data.extracionRegex];
   }
   let inputResult = '';
   let outputResult = 0;
@@ -117,29 +118,39 @@ const getRandomInput = () => {
       isLastNumber = false;
     }
   }
-  return [inputResult, outputResult, parseMumber];
+  return [inputResult, outputResult, parseMumber, madeCustomRegex];
 };
 
 describe('랜덤문자열 생성기', () => {
   it('커스텀 구분자를 통해 테스트 합니다', async () => {
-    const [input, output, parseMumber] = getRandomInput();
+    const [input, output, parseMumber, extracionRegex] = getRandomInput();
 
     inputView.readLineMessage.mockImplementationOnce(() => input);
 
     const controller = new Controller();
     const logSpy = jest.spyOn(Console, 'print').mockImplementation(() => {});
     const parsedValueSpy = jest.spyOn(Parser.prototype, 'parseData');
+    const extractionValueSpy = jest.spyOn(
+      Extraction.prototype,
+      'extractCustom',
+    );
 
-    let parsedValue;
     try {
       await controller.run();
-      parsedValue = parsedValueSpy.mock.results[0].value;
-      compareArrays(parseMumber, parsedValue);
-      expect(parseMumber).toEqual(parsedValue);
+
+      const extractionSpyValue = extractionValueSpy.mock.results[0].value;
+      const parsedSpyValue = parsedValueSpy.mock.results[0].value;
+
+      compareArrays(parseMumber, parsedSpyValue); // 디버깅을 위한 콘솔
+
+      console.log('extracionRegex', extracionRegex);
+      console.log('extractionSpyValue', extractionSpyValue);
+      expect(new Set(extracionRegex)).toEqual(new Set(extractionSpyValue));
+      expect(parseMumber).toEqual(parsedSpyValue);
       expect(logSpy).toHaveBeenCalledWith(`결과 : ${output}`);
     } catch (err) {
       // 실패하면 에러 케이스 저장
-      saveErrorCase(input, output, parseMumber);
+      saveErrorCase(input, output, parseMumber, extracionRegex);
       throw err;
     }
   });
