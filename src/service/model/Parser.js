@@ -6,7 +6,7 @@ export default class Parser {
     regexs.forEach((regex) => {
       const splitType = `//${regex}\\n`;
       const splitedText = inputResult.split(splitType);
-      inputResult = `${splitedText[0]}${regex}${splitedText[1]}`;
+      inputResult = splitedText.join('');
     });
 
     const totalRegexs = [...regexs, ',', ':'];
