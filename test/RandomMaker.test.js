@@ -43,16 +43,16 @@ const getRandomInput = () => {
   let outputResult = 0;
 
   // 커스텀 구분자 개수를 정하다
-  const customRegexLength = getRandomNumber(1, 2);
+  const customRegexLength = getRandomNumber(1, 1000);
   const madeCustomRegex = makeCustomRegex(customRegexLength);
   const addedCustomRegex = [];
 
   // 숫자 개수를 정하다
-  const numberLength = getRandomNumber(1, 10);
+  const numberLength = getRandomNumber(1, 100000);
   for (let i = 0; i < numberLength; i++) {
     const testNumber = getRandomNumber(0, 2);
     if (testNumber === 0) {
-      const randNumber = getRandomNumber(0, 100);
+      const randNumber = getRandomNumber(0, 100000);
       inputResult += randNumber; // 추가해야 함
       outputResult += randNumber;
     } else if (testNumber === 1) {
