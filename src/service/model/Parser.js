@@ -6,15 +6,23 @@ export default class Parser {
     regexs.forEach((regex) => {
       const splitType = `//${regex}\\n`;
       const splitedText = inputResult.split(splitType);
-      inputResult = splitedText.join('');
+      inputResult = `${splitedText[0]}${regex}${splitedText[1]}`;
     });
 
     const totalRegexs = [...regexs, ',', ':'];
-    const regex = new RegExp(`[${totalRegexs.join('')}]`);
+    const escapedRegexs = totalRegexs.map((regex) =>
+      this.#escapeForCharClass(regex),
+    );
+
+    const regex = new RegExp(`[${escapedRegexs.join('')}]`);
 
     return inputResult
       .split(regex)
       .filter((item) => item !== '') // 빈문자열 제거
       .map((item) => Number(item));
+  }
+
+  #escapeForCharClass(char) {
+    return char.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
   }
 }
