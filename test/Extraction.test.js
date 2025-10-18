@@ -24,4 +24,10 @@ describe('Extraction 클래스 테스트', () => {
     const extraction = new Extraction();
     expect(extraction.extractCustom(inputText)).toEqual([';', 'ㅁ']);
   });
+
+  it('커스텀 구분자가 \\인경우', () => {
+    const inputText = '//\\\\n';
+    const extraction = new Extraction();
+    expect(extraction.extractCustom(inputText)).toEqual(['\\']);
+  });
 });
