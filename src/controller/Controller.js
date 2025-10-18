@@ -20,9 +20,7 @@ export default class Controller {
 
       const customRegexs = this.extraction.extractCustom(input);
       const parsedNumber = this.parser.parseData(customRegexs, input);
-      console.log('parsedNumber', parsedNumber);
-      validate.isIntegers(parsedNumber);
-
+      validate.isNotMinus(parsedNumber);
       const numbers = new Number(parsedNumber);
       await outputView.printMessage(`결과 : ${numbers.getAddedNumbers()}`);
     } catch (error) {
