@@ -23,6 +23,24 @@ jest.mock('../src/view/InputView.js', () => ({
 // 커스텀 구분자 추가하기 함수 getCustomRegexWithText
 // 구분자 추가하기 함수
 
+const compareArrays = (expected, actual) => {
+  const maxLength = Math.max(expected.length, actual.length);
+  let hasDifference = false;
+
+  for (let i = 0; i < maxLength; i++) {
+    const exp = expected[i];
+    const act = actual[i];
+    if (exp !== act) {
+      console.log(`인덱스 ${i}: expected=${exp}, actual=${act}`);
+      hasDifference = true;
+    }
+  }
+
+  if (!hasDifference) {
+    console.log('두 배열은 동일합니다.');
+  }
+};
+
 const ERROR_DIR = path.join(process.cwd(), 'error_cases');
 if (!fs.existsSync(ERROR_DIR)) fs.mkdirSync(ERROR_DIR);
 const errorFilePath = path.join(ERROR_DIR, 'last_error.json');
@@ -40,8 +58,12 @@ const getRandomNumber = (start = 1, end = 9) =>
 const makeCustomRegex = (customRegexLength) => {
   const customRegexs = [];
   for (let i = 0; i < customRegexLength; i++) {
-    const textLength = Random.pickNumberInRange(32, 126);
-    customRegexs.push(String.fromCharCode(textLength));
+    let charCode;
+    // 48 ('0') ~ 57 ('9') 사이의 숫자가 나오면 다시 뽑습니다.
+    do {
+      charCode = Random.pickNumberInRange(32, 126);
+    } while (charCode >= 48 && charCode <= 57);
+    customRegexs.push(String.fromCharCode(charCode));
   }
   return customRegexs;
 };
@@ -67,16 +89,23 @@ const getRandomInput = () => {
 
   // 숫자 개수를 정하다
   const numberLength = getRandomNumber(1, 1000);
+  let isLastNumber = false;
   for (let i = 0; i < numberLength; i++) {
     const testNumber = getRandomNumber(0, 2);
-    if (testNumber === 0) {
+    if (
+      testNumber === 0 &&
+      !isLastNumber &&
+      !madeCustomRegex.includes(testNumber)
+    ) {
       const randNumber = getRandomNumber(0, 100000);
       inputResult += randNumber; // 추가해야 함
       outputResult += randNumber;
       parseMumber.push(randNumber);
+      isLastNumber = true;
     } else if (testNumber === 1) {
       const randDefaultRegex = getRandomValueInArray([':', ',']);
       inputResult += randDefaultRegex; // 추가해야 함
+      isLastNumber = false;
     } else {
       const randCustomRegex = getRandomValueInArray(madeCustomRegex);
       if (!addedCustomRegex.includes(randCustomRegex)) {
@@ -85,6 +114,7 @@ const getRandomInput = () => {
       } else {
         inputResult += randCustomRegex;
       }
+      isLastNumber = false;
     }
   }
   return [inputResult, outputResult, parseMumber];
@@ -104,11 +134,12 @@ describe('랜덤문자열 생성기', () => {
     try {
       await controller.run();
       parsedValue = parsedValueSpy.mock.results[0].value;
+      compareArrays(parseMumber, parsedValue);
       expect(parseMumber).toEqual(parsedValue);
       expect(logSpy).toHaveBeenCalledWith(`결과 : ${output}`);
     } catch (err) {
       // 실패하면 에러 케이스 저장
-      saveErrorCase(input, output, parsedValue);
+      saveErrorCase(input, output, parseMumber);
       throw err;
     }
   });
