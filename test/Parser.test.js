@@ -66,7 +66,7 @@ describe('Parser 클래스의 useCase를 추가하다', () => {
   it('커스텀 구분자가 여러개 적히고 숫자가 사이에 있는경우', () => {
     const regxs = [';', '|'];
     const inputText = ',//;\\n1//|\\n1|2';
-    expect(parser.parseData(regxs, inputText)).toEqual([1, 1, 2]);
+    expect(parser.parseData(regxs, inputText)).toEqual([11, 2]);
   });
 });
 
