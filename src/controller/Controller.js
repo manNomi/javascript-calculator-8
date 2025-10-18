@@ -15,7 +15,8 @@ export default class Controller {
     try {
       const input =
         await inputView.readLineMessage('덧셈할 문자열을 입력해 주세요.');
-      validate.isLong(input);
+
+      // validate.isLong(input);
 
       const customRegexs = this.extraction.extractCustom(input);
       const parsedNumber = this.parser.parseData(customRegexs, input);
