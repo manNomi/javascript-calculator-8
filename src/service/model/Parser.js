@@ -5,7 +5,8 @@ export default class Parser {
     // 커스텀 구분자가 포함되는경우 양식대로 파싱
     regexs.forEach((regex) => {
       const splitType = `//${regex}\\n`;
-      inputResult = inputResult.split(splitType).join('');
+      const splitedText = inputResult.split(splitType);
+      inputResult = `${splitedText[0]}${regex}${splitedText[1]}`;
     });
 
     const totalRegexs = [...regexs, ',', ':'];
