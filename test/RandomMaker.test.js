@@ -34,7 +34,7 @@ const makeCustomRegex = (customRegexLength) => {
 };
 
 const getRandomValueInArray = (values) => {
-  const index = getRandomNumber(0, values.length);
+  const index = getRandomNumber(0, values.length - 1);
   return values[index];
 };
 
