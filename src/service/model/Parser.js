@@ -11,6 +11,11 @@ export default class Parser {
     const totalRegexs = [...regexs, ',', ':'];
     const regex = new RegExp(`[${totalRegexs.join('')}]`);
 
+    console.log(
+      'inputResult',
+      inputResult,
+      inputResult.split(regex).filter((item) => item !== ''),
+    );
     return inputResult
       .split(regex)
       .filter((item) => item !== '') // 빈문자열 제거

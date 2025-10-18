@@ -20,6 +20,7 @@ export default class Controller {
 
       const customRegexs = this.extraction.extractCustom(input);
       const parsedNumber = this.parser.parseData(customRegexs, input);
+      console.log('parsedNumber', parsedNumber);
       validate.isIntegers(parsedNumber);
 
       const numbers = new Number(parsedNumber);
