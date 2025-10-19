@@ -9,9 +9,15 @@ export default class Parser {
   }
 
   parseCustomRegex(regexs, inputText) {
-    let result = inputText;
-    const pattern = new RegExp(`//${regexs}\\n`, 'g');
-    result = result.replace(pattern, '');
-    return result;
+    let inputResult = inputText;
+
+    regexs.forEach((regex) => {
+      const splitType = `//${regex}\\n`;
+      if (inputResult.startsWith(splitType)) {
+        inputResult = inputResult.slice(splitType.length);
+      }
+    });
+
+    return inputResult;
   }
 }

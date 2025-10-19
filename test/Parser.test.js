@@ -4,6 +4,7 @@ describe('Parser 클래스를 테스트 하다', () => {
   const parser = new Parser();
   it('구분자와 입력을 받아 파싱을 하다', () => {
     const regxs = ['/', '|'];
+    // regexs 테스트시 이스케이프 처리를 해주고 넘겨야함
     const inputText = '2/123/2|31';
     expect(parser.parseData(regxs, inputText)).toEqual([2, 123, 2, 31]);
   });
@@ -32,20 +33,8 @@ describe('파싱 - 커스텀 구분자', () => {
 
   it('커스텀 구분자가 여러개 적히는 경우', () => {
     const regxs = [';', '|'];
-    const inputText = '//;\\n1//|\\n';
-    expect(parser.parseCustomRegex(regxs, inputText)).toEqual(';1|');
-  });
-
-  it('커스텀 구분자가 여러개 적히고 숫자가 사이에 있는경우', () => {
-    const regxs = [';', '|'];
-    const inputText = '//;\\n1//|\\n1|2';
-    expect(parser.parseCustomRegex(regxs, inputText)).toEqual(';1|1|2');
-  });
-
-  it('구분자가 연속으로 작성된 경우 //;\\n1;;', () => {
-    const regxs = [';'];
-    const inputText = '//;\\n1;;';
-    expect(parser.parseCustomRegex(regxs, inputText)).toEqual(';1;;');
+    const inputText = '//;\\n//|\\n1';
+    expect(parser.parseCustomRegex(regxs, inputText)).toEqual('1');
   });
 });
 
