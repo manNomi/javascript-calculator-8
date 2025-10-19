@@ -11,6 +11,13 @@ const validate = {
       if (number < 0) throw new Error(ERROR_MESSAGE.NOT_MINUS);
     });
   },
+  isRegexError(inputText, customRegexs) {
+    // 각 구분자마다 연속 검사
+    [',', ':', ...customRegexs].forEach((delim) => {
+      const regex = new RegExp(`${delim}{2,}`);
+      if (regex.test(inputText)) throw new Error(ERROR_MESSAGE.NOT_MINUS);
+    });
+  },
 
   // node js 환경에서 입력은 512MB~1GB 로 isLong 함수 불필요
   // isLong(numbers) {
