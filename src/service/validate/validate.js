@@ -58,6 +58,10 @@ const validate = {
       if (REGEX_PATTERNS.DIGIT.test(delimiter)) {
         throw new Error(ERROR_MESSAGE.DELIMITER_HAS_NUMBER);
       }
+      // 구분자가 한글자인지 체크
+      if (delimiter.length !== 1) {
+        throw new Error(ERROR_MESSAGE.DELIMITER_NOT_SINGLE_CHAR);
+      }
     });
   },
 };
