@@ -18,4 +18,8 @@ export const RegexUtils = {
   createSplitPattern(delimiters) {
     return new RegExp(delimiters.join('|'));
   },
+
+  createCusomPattern(delimiter) {
+    return `//${delimiter}\\n`;
+  },
 };

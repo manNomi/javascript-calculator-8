@@ -1,25 +1,27 @@
 import { RegexUtils } from '../../constant/regex.js';
 
+const DEFAULT_DELIMITERS = [',', ':'];
+
 export default class Parser {
-  parseData(inputText, escapedRegexs) {
-    const totalRegexs = [...escapedRegexs, ',', ':'];
-    const regex = RegexUtils.createSplitPattern(totalRegexs);
-    return inputText
-      .split(regex)
-      .filter((item) => item !== '') // 빈문자열 제거
-      .map((item) => Number(item));
+  parseToNumbers(text, escapedDelimiters) {
+    const allDelimiters = [...escapedDelimiters, ...DEFAULT_DELIMITERS];
+    const splitPattern = RegexUtils.createSplitPattern(allDelimiters);
+    return text
+      .split(splitPattern)
+      .filter((value) => value !== '')
+      .map((value) => Number(value));
   }
 
-  parseCustomRegex(inputText, regexs) {
-    let inputResult = inputText;
+  removeCustomDelimiterDefinitions(text, delimiters) {
+    let result = text;
 
-    regexs.forEach((regex) => {
-      const splitType = `//${regex}\\n`;
-      if (inputResult.startsWith(splitType)) {
-        inputResult = inputResult.slice(splitType.length);
+    delimiters.forEach((delimiter) => {
+      const definition = RegexUtils.createCusomPattern(delimiter);
+      if (result.startsWith(definition)) {
+        result = result.slice(definition.length);
       }
     });
 
-    return inputResult;
+    return result;
   }
 }
