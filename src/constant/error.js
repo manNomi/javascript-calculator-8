@@ -6,4 +6,6 @@ export const ERROR_MESSAGE = {
   DELIMITER_EMPTY: '[ERROR] 구분자가 공백입니다.',
   DELIMITER_HAS_WHITESPACE: '[ERROR] 구분자에 공백이 포함되어 있습니다.',
   DELIMITER_HAS_NUMBER: '[ERROR] 구분자에 숫자가 포함되어 있습니다.',
+  DELIMITER_NOT_SINGLE_CHAR: '[ERROR] 구분자는 한 글자여야 합니다.',
+  NOT_INTEGER: '[ERROR] 소수가 포함되어 있습니다.',
 };
