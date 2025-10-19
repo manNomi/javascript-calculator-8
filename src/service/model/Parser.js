@@ -1,7 +1,9 @@
+import { RegexUtils } from '../../constant/regex.js';
+
 export default class Parser {
-  parseData(inputText, esacpedRegexs) {
-    const totalRegexs = [...esacpedRegexs, ',', ':'];
-    const regex = new RegExp(totalRegexs.join('|'));
+  parseData(inputText, escapedRegexs) {
+    const totalRegexs = [...escapedRegexs, ',', ':'];
+    const regex = RegexUtils.createSplitPattern(totalRegexs);
     return inputText
       .split(regex)
       .filter((item) => item !== '') // 빈문자열 제거
