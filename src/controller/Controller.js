@@ -19,13 +19,14 @@ export default class Controller {
       // validate.isLong(input);
 
       const { regexs, esacpedRegexs } = this.extraction.extractCustom(input);
+      console.log(regexs, esacpedRegexs);
 
       validate.isRegexValidError(regexs);
-      validate.isRegexContinueError(input, esacpedRegexs);
 
-      console.log(regexs);
       const parsingCustomText = this.parser.parseCustomRegex(input, regexs);
       console.log(parsingCustomText);
+
+      validate.isRegexContinueError(parsingCustomText, esacpedRegexs);
 
       const parsedNumber = this.parser.parseData(
         parsingCustomText,
