@@ -121,34 +121,29 @@ const getRandomInput = () => {
   return [inputResult, outputResult, parseMumber, usedCustomRegex];
 };
 
-describe('랜덤문자열 생성기', () => {
-  it('커스텀 구분자를 통해 테스트 합니다', async () => {
-    const [input, output, parseMumber, extracionRegex] = getRandomInput();
+it('커스텀 구분자를 통해 테스트 합니다', async () => {
+  const [input, output, parseMumber, extracionRegex] = getRandomInput();
 
-    inputView.readLineMessage.mockImplementationOnce(() => input);
+  inputView.readLineMessage.mockImplementationOnce(() => input);
 
-    const controller = new Controller();
-    const logSpy = jest.spyOn(Console, 'print').mockImplementation(() => {});
-    const parsedValueSpy = jest.spyOn(Parser.prototype, 'parseData');
-    const extractionValueSpy = jest.spyOn(
-      Extraction.prototype,
-      'extractCustom',
-    );
+  const controller = new Controller();
+  const logSpy = jest.spyOn(Console, 'print').mockImplementation(() => {});
+  const parsedValueSpy = jest.spyOn(Parser.prototype, 'parseData');
+  const extractionValueSpy = jest.spyOn(Extraction.prototype, 'extractCustom');
 
-    try {
-      await controller.run();
+  try {
+    await controller.run();
 
-      const extractionSpyValue = extractionValueSpy.mock.results[0].value;
-      const parsedSpyValue = parsedValueSpy.mock.results[0].value;
+    const extractionSpyValue = extractionValueSpy.mock.results[0].value;
+    const parsedSpyValue = parsedValueSpy.mock.results[0].value;
 
-      compareArrays(parseMumber, parsedSpyValue); // 디버깅을 위한 콘솔
-      expect(new Set(extracionRegex)).toEqual(new Set(extractionSpyValue));
-      expect(parseMumber).toEqual(parsedSpyValue);
-      expect(logSpy).toHaveBeenCalledWith(`결과 : ${output}`);
-    } catch (err) {
-      // 실패하면 에러 케이스 저장
-      saveErrorCase(input, output, parseMumber, extracionRegex);
-      throw err;
-    }
-  });
+    compareArrays(parseMumber, parsedSpyValue); // 디버깅을 위한 콘솔
+    expect(new Set(extracionRegex)).toEqual(new Set(extractionSpyValue.regexs));
+    expect(parseMumber).toEqual(parsedSpyValue);
+    expect(logSpy).toHaveBeenCalledWith(`결과 : ${output}`);
+  } catch (err) {
+    // 실패하면 에러 케이스 저장
+    saveErrorCase(input, output, parseMumber, extracionRegex);
+    throw err;
+  }
 });
