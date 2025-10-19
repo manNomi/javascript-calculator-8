@@ -5,7 +5,7 @@ describe('Parser 클래스를 테스트 하다', () => {
   it('구분자와 입력을 받아 파싱을 하다', () => {
     const regxs = ['/', '|'];
     const inputText = '2/123/2|31';
-    expect([2, 123, 2, 31]).toEqual(parser.parseData(regxs, inputText));
+    expect(parser.parseData(regxs, inputText)).toEqual([2, 123, 2, 31]);
   });
 });
 
@@ -17,18 +17,18 @@ describe('Parser 클래스의 useCase를 추가하다', () => {
   it('구분자는 기본적으로 , : 를 포함합니다', () => {
     const regxs = [];
     const inputText = '11:6,1';
-    expect([11, 6, 1]).toEqual(parser.parseData(regxs, inputText));
+    expect(parser.parseData(regxs, inputText)).toEqual([11, 6, 1]);
   });
 
   it('구분자에 \\ 이스케이프가 포함되는경우', () => {
     const regxs = ['\\']; // 커스텀 구분자: 백슬래시
     const inputText = '1\\2\\3';
-    expect([1, 2, 3]).toEqual(parser.parseData(regxs, inputText));
+    expect(parser.parseData(regxs, inputText)).toEqual([1, 2, 3]);
   });
   it('구분자가 여러글자 인경우', () => {
     const regxs = ['ab', 'bc', 'cd'];
     const inputText = '1ab2bc2cd3';
-    expect([1, 2, 2, 3]).toEqual(parser.parseData(regxs, inputText));
+    expect(parser.parseData(regxs, inputText)).toEqual([1, 2, 2, 3]);
   });
 });
 
@@ -38,19 +38,19 @@ describe('파싱 - 커스텀 구분자', () => {
   it('커스텀 구분자가 여러개 적히는 경우', () => {
     const regxs = [';', '|'];
     const inputText = '//;\\n1//|\\n';
-    expect(';1|').toEqual(parser.parseCustomRegex(regxs, inputText));
+    expect(parser.parseCustomRegex(regxs, inputText)).toEqual(';1|');
   });
 
   it('커스텀 구분자가 여러개 적히고 숫자가 사이에 있는경우', () => {
     const regxs = [';', '|'];
     const inputText = '//;\\n1//|\\n1|2';
-    expect(';1|1|2').toEqual(parser.parseCustomRegex(regxs, inputText));
+    expect(parser.parseCustomRegex(regxs, inputText)).toEqual(';1|1|2');
   });
 
   it('구분자가 연속으로 작성된 경우 //;\\n1;;', () => {
     const regxs = [';'];
     const inputText = '//;\\n1;;';
-    expect(';1;;').toEqual(parser.parseCustomRegex(regxs, inputText));
+    expect(parser.parseCustomRegex(regxs, inputText)).toEqual(';1;;');
   });
 });
 
