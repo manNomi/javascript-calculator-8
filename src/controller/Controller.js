@@ -16,21 +16,18 @@ export default class Controller {
       const input =
         await inputView.readLineMessage('덧셈할 문자열을 입력해 주세요.');
 
-      const { regexs, escapedRegexs } = this.extraction.extractCustom(input);
+      const { raw, escaped } = this.extraction.extractCustomDelimiters(input);
 
-      validate.validateDelimiters(regexs);
+      validate.validateDelimiters(raw);
 
       const textWithoutDefinitions =
-        this.parser.removeCustomDelimiterDefinitions(input, regexs);
+        this.parser.removeCustomDelimiterDefinitions(input, raw);
 
-      validate.validateContinuousDelimiters(
-        textWithoutDefinitions,
-        escapedRegexs,
-      );
+      validate.validateContinuousDelimiters(textWithoutDefinitions, escaped);
 
       const numbers = this.parser.parseToNumbers(
         textWithoutDefinitions,
-        escapedRegexs,
+        escaped,
       );
       validate.validateNumbers(numbers);
       const numberModel = new Number(numbers);
