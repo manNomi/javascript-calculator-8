@@ -1,9 +1,7 @@
 export default class Parser {
   parseData(regexs, inputText) {
     const totalRegexs = [...regexs, ',', ':'];
-
     const regex = new RegExp(`[${totalRegexs.join('')}]`);
-
     return inputText
       .split(regex)
       .filter((item) => item !== '') // 빈문자열 제거

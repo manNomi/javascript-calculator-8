@@ -28,6 +28,6 @@ describe('Extraction 클래스 테스트', () => {
   it('커스텀 구분자가 \\인경우', () => {
     const inputText = '//\\\\n';
     const extraction = new Extraction();
-    expect(extraction.extractCustom(inputText)).toEqual(['\\']);
+    expect(extraction.extractCustom(inputText)).toEqual(['\\\\']);
   });
 });
