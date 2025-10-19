@@ -29,7 +29,7 @@ describe(`랜덤 테스트 ${TOTAL_ITERATIONS}`, () => {
       const parsedValueSpy = jest.spyOn(Parser.prototype, 'parseToNumbers');
       const extractionValueSpy = jest.spyOn(
         Extraction.prototype,
-        'extractCustom',
+        'extractCustomDelimiters',
       );
 
       try {
@@ -38,7 +38,6 @@ describe(`랜덤 테스트 ${TOTAL_ITERATIONS}`, () => {
         const extractionSpyValue = extractionValueSpy.mock.results[0].value;
         const parsedSpyValue = parsedValueSpy.mock.results[0].value;
 
-        // 진행 상황 표시 (100번마다)
         if (i % 100 === 0) {
           console.log(`진행 중: ${i}/${TOTAL_ITERATIONS} `);
         }
@@ -46,7 +45,7 @@ describe(`랜덤 테스트 ${TOTAL_ITERATIONS}`, () => {
         compareArrays(parseMumber, parsedSpyValue);
 
         expect(new Set(extracionRegex)).toEqual(
-          new Set(extractionSpyValue.regexs),
+          new Set(extractionSpyValue.raw),
         );
         expect(parseMumber).toEqual(parsedSpyValue);
         expect(logSpy).toHaveBeenCalledWith(`결과 : ${output}`);
