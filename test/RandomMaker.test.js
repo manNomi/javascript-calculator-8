@@ -142,9 +142,6 @@ describe('랜덤문자열 생성기', () => {
       const parsedSpyValue = parsedValueSpy.mock.results[0].value;
 
       compareArrays(parseMumber, parsedSpyValue); // 디버깅을 위한 콘솔
-
-      console.log('extracionRegex', extracionRegex);
-      console.log('extractionSpyValue', extractionSpyValue);
       expect(new Set(extracionRegex)).toEqual(new Set(extractionSpyValue));
       expect(parseMumber).toEqual(parsedSpyValue);
       expect(logSpy).toHaveBeenCalledWith(`결과 : ${output}`);
