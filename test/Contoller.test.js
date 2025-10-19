@@ -43,4 +43,12 @@ describe('Controller 클래스 E2E 테스트', () => {
     await controller.run();
     expect(logSpy).toHaveBeenCalledWith('결과 : 1');
   });
+
+  it('입력 : 1.2,2.3:3.4 | 출력 : 결과 : 6.9', async () => {
+    inputView.readLineMessage.mockImplementationOnce(() => '1.2,2.3:3.4');
+    const controller = new Controller();
+    const logSpy = jest.spyOn(Console, 'print').mockImplementation(() => {});
+    await controller.run();
+    expect(logSpy).toHaveBeenCalledWith('결과 : 6.9');
+  });
 });
