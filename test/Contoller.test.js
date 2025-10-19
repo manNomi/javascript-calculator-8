@@ -51,4 +51,18 @@ describe('Controller 클래스 E2E 테스트', () => {
     await controller.run();
     expect(logSpy).toHaveBeenCalledWith('결과 : 6.9');
   });
+
+  it('//;\\n1;; 연속된 구분자 사용', async () => {
+    inputView.readLineMessage.mockImplementationOnce(() => '//;\\n1;;');
+    const controller = new Controller();
+    await controller.run();
+    await expect(controller.run()).rejects.toThrow('[ERROR]');
+  });
+
+  it('1;1 미 언급 구분자 사용', async () => {
+    inputView.readLineMessage.mockImplementationOnce(() => '1;1');
+    const controller = new Controller();
+    await controller.run();
+    await expect(controller.run()).rejects.toThrow('[ERROR]');
+  });
 });
