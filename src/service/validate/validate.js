@@ -1,45 +1,54 @@
 import { ERROR_MESSAGE } from '../../constant/error.js';
 
+const DEFAULT_DELIMITERS = [',', ':'];
+
 const validate = {
-  isNumber(numbers) {
+  validateNumbers(numbers) {
     numbers.forEach((number) => {
-      // 공백을 허용하지 않음
-      if (typeof number === 'string' && number.trim() === '')
+      // 공백 체크
+      if (typeof number === 'string' && number.trim() === '') {
         throw new Error(ERROR_MESSAGE.NOT_EMPTY);
-      if (Number.isNaN(Number(number)))
+      }
+      // 숫자 여부 체크
+      if (Number.isNaN(Number(number))) {
         throw new Error(ERROR_MESSAGE.NOT_NUMBER);
-      if (number < 0) throw new Error(ERROR_MESSAGE.NOT_MINUS);
-    });
-  },
-  isRegexContinueError(inputText, esacpedRegexs) {
-    // 각 구분자마다 연속 검사
-    [',', ':', ...esacpedRegexs].forEach((delim) => {
-      const regex = new RegExp(`${delim}{2,}`);
-      if (regex.test(inputText))
-        throw new Error(`[ERROR] 연속된 구분자가 존재합니다 ${delim}`);
-    });
-  },
-  isRegexValidError(customRegexs) {
-    customRegexs.forEach((regex) => {
-      if (!regex) {
-        throw new Error('[ERROR]구분자가 공백입니다');
       }
-      // 공백 포함 체크
-      if (/\s/.test(regex)) {
-        throw new Error('[ERROR] 구분자가 공백입니다');
-      }
-      // 숫자 포함 체크
-      if (/\d/.test(regex)) {
-        throw new Error('[ERROR] 구분자가 숫자입니다');
+      // 음수 체크
+      if (number < 0) {
+        throw new Error(ERROR_MESSAGE.NOT_MINUS);
       }
     });
   },
 
-  // node js 환경에서 입력은 512MB~1GB 로 isLong 함수 불필요
-  // isLong(numbers) {
-  //   if (numbers.length >= 50) {
-  //     throw new Error('[ERROR]');
-  //   }
-  // },
+  validateContinuousDelimiters(inputText, escapedDelimiters) {
+    const textToValidate = inputText.replace(/\/\/.+?\\n/g, '');
+    const allDelimiters = [...DEFAULT_DELIMITERS, ...escapedDelimiters];
+    allDelimiters.forEach((delimiter) => {
+      const escapedDelimiter = delimiter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const continuousPattern = new RegExp(`${escapedDelimiter}{2,}`);
+
+      if (continuousPattern.test(textToValidate)) {
+        throw new Error(ERROR_MESSAGE.DELIMITER_CONTINUOUS);
+      }
+    });
+  },
+
+  validateDelimiters(customDelimiters) {
+    customDelimiters.forEach((delimiter) => {
+      // 빈 값 체크
+      if (!delimiter) {
+        throw new Error(ERROR_MESSAGE.DELIMITER_EMPTY);
+      }
+      // 공백 포함 체크
+      if (/\s/.test(delimiter)) {
+        throw new Error(ERROR_MESSAGE.DELIMITER_HAS_WHITESPACE);
+      }
+      // 숫자 포함 체크
+      if (/\d/.test(delimiter)) {
+        throw new Error(ERROR_MESSAGE.DELIMITER_HAS_NUMBER);
+      }
+    });
+  },
 };
+
 export default validate;
