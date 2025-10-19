@@ -16,13 +16,12 @@ export default class Controller {
       const input =
         await inputView.readLineMessage('덧셈할 문자열을 입력해 주세요.');
 
+      // 구분자 추출 {raw:원본,escaped:정규식 이스케이프}
       const { raw, escaped } = this.extraction.extractCustomDelimiters(input);
-
       validate.validateDelimiters(raw);
 
       const textWithoutDefinitions =
         this.parser.removeCustomDelimiterDefinitions(input, raw);
-
       validate.validateContinuousDelimiters(textWithoutDefinitions, escaped);
 
       const numbers = this.parser.parseToNumbers(
@@ -30,6 +29,7 @@ export default class Controller {
         escaped,
       );
       validate.validateNumbers(numbers);
+
       const numberModel = new Number(numbers);
       await outputView.printMessage(`결과 : ${numberModel.getAddedNumbers()}`);
     } catch (error) {
