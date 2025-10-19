@@ -18,6 +18,10 @@ const validate = {
       if (number < 0) {
         throw new Error(ERROR_MESSAGE.NOT_MINUS);
       }
+      // 소수 체크
+      if (!Number.isInteger(Number(number))) {
+        throw new Error(ERROR_MESSAGE.NOT_INTEGER);
+      }
     });
   },
 
