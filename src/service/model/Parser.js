@@ -1,13 +1,6 @@
 export default class Parser {
-  constructor(customRegexs) {
-    this.customRegexs = customRegexs;
-    this.customEsacpedRegexs = customRegexs.map((item) =>
-      this.#escapeForCharClass(item),
-    );
-  }
-
-  parseData(inputText) {
-    const totalRegexs = [...this.customEsacpedRegexs, ',', ':'];
+  parseData(inputText, esacpedRegexs) {
+    const totalRegexs = [...esacpedRegexs, ',', ':'];
     const regex = new RegExp(totalRegexs.join('|'));
     return inputText
       .split(regex)
@@ -15,10 +8,10 @@ export default class Parser {
       .map((item) => Number(item));
   }
 
-  parseCustomRegex(inputText) {
+  parseCustomRegex(inputText, regexs) {
     let inputResult = inputText;
 
-    this.customRegexs.forEach((regex) => {
+    regexs.forEach((regex) => {
       const splitType = `//${regex}\\n`;
       if (inputResult.startsWith(splitType)) {
         inputResult = inputResult.slice(splitType.length);
@@ -26,10 +19,5 @@ export default class Parser {
     });
 
     return inputResult;
-  }
-
-  // 정규 문자열이 포함되는 경우 대비
-  #escapeForCharClass(char) {
-    return char.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
   }
 }

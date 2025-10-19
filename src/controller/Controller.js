@@ -8,6 +8,7 @@ import validate from '../service/validate/validate.js';
 export default class Controller {
   constructor() {
     this.extraction = new Extraction();
+    this.parser = new Parser();
   }
 
   async run() {
@@ -17,18 +18,19 @@ export default class Controller {
 
       // validate.isLong(input);
 
-      const customRegexs = this.extraction.extractCustom(input);
+      const { regexs, esacpedRegexs } = this.extraction.extractCustom(input);
 
-      validate.isRegexValidError(customRegexs);
-      validate.isRegexContinueError(input, customRegexs);
+      validate.isRegexValidError(regexs);
+      validate.isRegexContinueError(input, esacpedRegexs);
 
-      const parser = new Parser(customRegexs);
-
-      console.log(customRegexs);
-      const parsingCustomText = parser.parseCustomRegex(input);
+      console.log(regexs);
+      const parsingCustomText = this.parser.parseCustomRegex(input, regexs);
       console.log(parsingCustomText);
 
-      const parsedNumber = parser.parseData(parsingCustomText);
+      const parsedNumber = this.parser.parseData(
+        parsingCustomText,
+        esacpedRegexs,
+      );
       console.log(parsedNumber);
       validate.isNumber(parsedNumber);
       const numbers = new Number(parsedNumber);
