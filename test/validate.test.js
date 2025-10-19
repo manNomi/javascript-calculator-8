@@ -37,3 +37,47 @@ describe('잘못된 입력에 대한 검증', () => {
     expect(() => validate.isNumber(parseInput)).toThrow('[ERROR]');
   });
 });
+
+describe('잘못된 구분자에 대한 ERROR', () => {
+  it('올바른 입력 1,2:3', () => {
+    const inputText = '1,2:3';
+    const regexs = [];
+    expect(() => validate.isRegexError(inputText, regexs)).not.toThrow(
+      '[ERROR]',
+    );
+  });
+
+  it('연속된 구분자 ERROR', () => {
+    const inputText = '12,,1';
+    const regexs = ['a'];
+    expect(() => validate.isRegexError(inputText, regexs)).toThrow('[ERROR]');
+  });
+  it('구분자가 선입력된 경우 허용', () => {
+    const inputText = ',12,1';
+    const regexs = [];
+    expect(() => validate.isRegexError(inputText, regexs)).not.toThrow(
+      '[ERROR]',
+    );
+  });
+  it('커스텀 구분자 양식을 포함한경우 //a\\n123a123', () => {
+    const inputText = '//a\\n123a123';
+    const regexs = ['a'];
+    expect(() => validate.isRegexError(inputText, regexs)).not.toThrow(
+      '[ERROR]',
+    );
+  });
+
+  it('커스텀 구분자 양식이 여러번 포함한경우 //a\\n123a123//n\\123n123', () => {
+    const inputText = '//a\\n123a123';
+    const regexs = ['a', 'n'];
+    expect(() => validate.isRegexError(inputText, regexs)).not.toThrow(
+      '[ERROR]',
+    );
+  });
+
+  it('커스텀 구분자 여러번 - 구분자 여러번 //a\\n123a123//n\\n123n123nn123', () => {
+    const inputText = '//a\\n123a123//n\\n123n123nn123';
+    const regexs = ['a', 'n'];
+    expect(() => validate.isRegexError(inputText, regexs)).toThrow('[ERROR]');
+  });
+});

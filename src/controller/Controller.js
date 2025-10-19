@@ -19,13 +19,23 @@ export default class Controller {
       // validate.isLong(input);
 
       const customRegexs = this.extraction.extractCustom(input);
-      const parsedNumber = this.parser.parseData(customRegexs, input);
+
+      validate.isRegexError(input, customRegexs);
+
+      const parsingCustomText = this.parser.parseCustomRegex(
+        customRegexs,
+        input,
+      );
+      const parsedNumber = this.parser.parseData(
+        customRegexs,
+        parsingCustomText,
+      );
       validate.isNumber(parsedNumber);
       const numbers = new Number(parsedNumber);
       await outputView.printMessage(`결과 : ${numbers.getAddedNumbers()}`);
     } catch (error) {
-      await outputView.printMessage(`${error.message}`);
-      throw new Error(error.message);
+      await outputView.printMessage(`[ERROR]`);
+      throw new Error(`[ERROR]`);
     }
   }
 }
