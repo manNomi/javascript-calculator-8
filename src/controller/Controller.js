@@ -20,17 +20,21 @@ export default class Controller {
 
       validate.validateDelimiters(regexs);
 
-      const parsingCustomText = this.parser.parseCustomRegex(input, regexs);
+      const textWithoutDefinitions =
+        this.parser.removeCustomDelimiterDefinitions(input, regexs);
 
-      validate.validateContinuousDelimiters(parsingCustomText, escapedRegexs);
-
-      const parsedNumber = this.parser.parseData(
-        parsingCustomText,
+      validate.validateContinuousDelimiters(
+        textWithoutDefinitions,
         escapedRegexs,
       );
-      validate.validateNumbers(parsedNumber);
-      const numbers = new Number(parsedNumber);
-      await outputView.printMessage(`결과 : ${numbers.getAddedNumbers()}`);
+
+      const numbers = this.parser.parseToNumbers(
+        textWithoutDefinitions,
+        escapedRegexs,
+      );
+      validate.validateNumbers(numbers);
+      const numberModel = new Number(numbers);
+      await outputView.printMessage(`결과 : ${numberModel.getAddedNumbers()}`);
     } catch (error) {
       await outputView.printMessage(error.message);
       throw new Error(error.message);

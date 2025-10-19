@@ -26,7 +26,7 @@ describe(`랜덤 테스트 ${TOTAL_ITERATIONS}`, () => {
 
       const controller = new Controller();
       const logSpy = jest.spyOn(Console, 'print').mockImplementation(() => {});
-      const parsedValueSpy = jest.spyOn(Parser.prototype, 'parseData');
+      const parsedValueSpy = jest.spyOn(Parser.prototype, 'parseToNumbers');
       const extractionValueSpy = jest.spyOn(
         Extraction.prototype,
         'extractCustom',
