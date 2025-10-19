@@ -1,4 +1,5 @@
 import { ERROR_MESSAGE } from '../../constant/error.js';
+import { REGEX_PATTERNS, RegexUtils } from '../../constant/regex.js';
 
 const DEFAULT_DELIMITERS = [',', ':'];
 
@@ -21,11 +22,17 @@ const validate = {
   },
 
   validateContinuousDelimiters(inputText, escapedDelimiters) {
-    const textToValidate = inputText.replace(/\/\/.+?\\n/g, '');
+    // 커스텀 구분자 정의 부분 제거
+    const textToValidate = inputText.replace(
+      REGEX_PATTERNS.CUSTOM_DELIMITER_DEFINITION,
+      '',
+    );
     const allDelimiters = [...DEFAULT_DELIMITERS, ...escapedDelimiters];
+
     allDelimiters.forEach((delimiter) => {
-      const escapedDelimiter = delimiter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-      const continuousPattern = new RegExp(`${escapedDelimiter}{2,}`);
+      const escapedDelimiter = RegexUtils.escapeRegexChars(delimiter);
+      const continuousPattern =
+        RegexUtils.createContinuousPattern(escapedDelimiter);
 
       if (continuousPattern.test(textToValidate)) {
         throw new Error(ERROR_MESSAGE.DELIMITER_CONTINUOUS);
@@ -40,11 +47,11 @@ const validate = {
         throw new Error(ERROR_MESSAGE.DELIMITER_EMPTY);
       }
       // 공백 포함 체크
-      if (/\s/.test(delimiter)) {
+      if (REGEX_PATTERNS.WHITESPACE.test(delimiter)) {
         throw new Error(ERROR_MESSAGE.DELIMITER_HAS_WHITESPACE);
       }
       // 숫자 포함 체크
-      if (/\d/.test(delimiter)) {
+      if (REGEX_PATTERNS.DIGIT.test(delimiter)) {
         throw new Error(ERROR_MESSAGE.DELIMITER_HAS_NUMBER);
       }
     });
