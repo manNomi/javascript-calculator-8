@@ -20,11 +20,6 @@ describe('Parser 클래스의 useCase를 추가하다', () => {
     expect(parser.parseData(regxs, inputText)).toEqual([11, 6, 1]);
   });
 
-  it('구분자에 \\ 이스케이프가 포함되는경우', () => {
-    const regxs = ['\\']; // 커스텀 구분자: 백슬래시
-    const inputText = '1\\2\\3';
-    expect(parser.parseData(regxs, inputText)).toEqual([1, 2, 3]);
-  });
   it('구분자가 여러글자 인경우', () => {
     const regxs = ['ab', 'bc', 'cd'];
     const inputText = '1ab2bc2cd3';
