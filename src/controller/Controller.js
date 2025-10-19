@@ -8,7 +8,6 @@ import validate from '../service/validate/validate.js';
 export default class Controller {
   constructor() {
     this.extraction = new Extraction();
-    this.parser = new Parser();
   }
 
   async run() {
@@ -23,17 +22,13 @@ export default class Controller {
       validate.isRegexValidError(customRegexs);
       validate.isRegexContinueError(input, customRegexs);
 
+      const parser = new Parser(customRegexs);
+
       console.log(customRegexs);
-      const parsingCustomText = this.parser.parseCustomRegex(
-        customRegexs,
-        input,
-      );
+      const parsingCustomText = parser.parseCustomRegex(input);
       console.log(parsingCustomText);
 
-      const parsedNumber = this.parser.parseData(
-        customRegexs,
-        parsingCustomText,
-      );
+      const parsedNumber = parser.parseData(parsingCustomText);
       console.log(parsedNumber);
       validate.isNumber(parsedNumber);
       const numbers = new Number(parsedNumber);
