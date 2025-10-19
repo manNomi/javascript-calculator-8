@@ -20,22 +20,27 @@ export default class Controller {
 
       const customRegexs = this.extraction.extractCustom(input);
 
-      validate.isRegexError(input, customRegexs);
+      validate.isRegexValidError(customRegexs);
+      validate.isRegexContinueError(input, customRegexs);
 
+      console.log(customRegexs);
       const parsingCustomText = this.parser.parseCustomRegex(
         customRegexs,
         input,
       );
+      console.log(parsingCustomText);
+
       const parsedNumber = this.parser.parseData(
         customRegexs,
         parsingCustomText,
       );
+      console.log(parsedNumber);
       validate.isNumber(parsedNumber);
       const numbers = new Number(parsedNumber);
       await outputView.printMessage(`결과 : ${numbers.getAddedNumbers()}`);
     } catch (error) {
-      await outputView.printMessage(`[ERROR]`);
-      throw new Error(`[ERROR]`);
+      await outputView.printMessage(error.message);
+      throw new Error(error.message);
     }
   }
 }

@@ -60,10 +60,9 @@ const makeCustomRegex = (customRegexLength) => {
   const customRegexs = [];
   for (let i = 0; i < customRegexLength; i++) {
     let charCode;
-    // 48 ('0') ~ 57 ('9') 사이의 숫자가 나오면 다시 뽑습니다.
     do {
-      charCode = Random.pickNumberInRange(32, 126);
-    } while (charCode >= 48 && charCode <= 57);
+      charCode = Random.pickNumberInRange(33, 126); // 32번(공백) 제외
+    } while (charCode >= 48 && charCode <= 57); // 숫자 제외
     customRegexs.push(String.fromCharCode(charCode));
   }
   return [...new Set(customRegexs)];
@@ -79,46 +78,47 @@ const getRandomInput = () => {
     const data = JSON.parse(fs.readFileSync(errorFilePath, 'utf-8'));
     return [data.input, data.output, data.parseMumber, data.extracionRegex];
   }
-  let inputResult = '';
+
+  let definitionString = ''; // "//P\n//l\n" 등 정의가 담길 부분
+  let numberString = ''; // "123P456l789..." 숫자가 담길 부분
   let outputResult = 0;
 
-  // 커스텀 구분자 개수를 정하다
   const customRegexLength = getRandomNumber(1, 100);
   const madeCustomRegex = makeCustomRegex(customRegexLength);
-  const addedCustomRegex = [];
   const parseMumber = [];
 
-  // 숫자 개수를 정하다
-  const numberLength = getRandomNumber(1, 1000);
-  let isLastNumber = false;
-  for (let i = 0; i < numberLength; i++) {
-    const testNumber = getRandomNumber(0, 2);
-    if (
-      testNumber === 0 &&
-      !isLastNumber &&
-      !madeCustomRegex.includes(testNumber)
-    ) {
-      const randNumber = getRandomNumber(0, 100000);
-      inputResult += randNumber; // 추가해야 함
-      outputResult += randNumber;
-      parseMumber.push(randNumber);
-      isLastNumber = true;
-    } else if (testNumber === 1) {
-      const randDefaultRegex = getRandomValueInArray([':', ',']);
-      inputResult += randDefaultRegex; // 추가해야 함
-      isLastNumber = false;
-    } else {
-      const randCustomRegex = getRandomValueInArray(madeCustomRegex);
-      if (!addedCustomRegex.includes(randCustomRegex)) {
-        inputResult += getCustomRegexWithText(randCustomRegex); // 추가해야 함
-        addedCustomRegex.push(randCustomRegex);
-      } else {
-        inputResult += randCustomRegex;
-      }
-      isLastNumber = false;
+  const usedCustomRegex = [];
+  const numToUse = getRandomNumber(1, madeCustomRegex.length); // 최소 1개는 사용
+  while (usedCustomRegex.length < numToUse) {
+    const regex = getRandomValueInArray(madeCustomRegex);
+    if (!usedCustomRegex.includes(regex)) {
+      usedCustomRegex.push(regex);
     }
   }
-  return [inputResult, outputResult, parseMumber, madeCustomRegex];
+
+  usedCustomRegex.forEach((regex) => {
+    definitionString += getCustomRegexWithText(regex); // `//${regex}\n`
+  });
+
+  const allAvailableDelimiters = [...usedCustomRegex, ':', ','];
+
+  const numberLength = getRandomNumber(1, 1000);
+
+  for (let i = 0; i < numberLength; i++) {
+    const randNumber = getRandomNumber(0, 100000);
+    numberString += randNumber; // 숫자 문자열에 추가
+    outputResult += randNumber;
+    parseMumber.push(randNumber);
+
+    if (i < numberLength - 1) {
+      const delimiter = getRandomValueInArray(allAvailableDelimiters);
+      numberString += delimiter; // `//P\n`가 아닌 `P` 자체가 추가됨
+    }
+  }
+
+  const inputResult = definitionString + numberString;
+
+  return [inputResult, outputResult, parseMumber, usedCustomRegex];
 };
 
 describe('랜덤문자열 생성기', () => {
