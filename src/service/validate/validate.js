@@ -11,11 +11,26 @@ const validate = {
       if (number < 0) throw new Error(ERROR_MESSAGE.NOT_MINUS);
     });
   },
-  isRegexError(inputText, customRegexs) {
+  isRegexContinueError(inputText, customRegexs) {
     // 각 구분자마다 연속 검사
     [',', ':', ...customRegexs].forEach((delim) => {
       const regex = new RegExp(`${delim}{2,}`);
-      if (regex.test(inputText)) throw new Error(ERROR_MESSAGE.NOT_MINUS);
+      if (regex.test(inputText)) throw new Error('연속된 구분자가 존재합니다');
+    });
+  },
+  isRegexValidError(customRegexs) {
+    customRegexs.forEach((regex) => {
+      if (!regex) {
+        throw new Error('구분자가 공백입니다');
+      }
+      // 공백 포함 체크
+      if (/\s/.test(regex)) {
+        throw new Error('구분자가 공백입니다');
+      }
+      // 숫자 포함 체크
+      if (/\d/.test(regex)) {
+        throw new Error('구분자가 숫자입니다');
+      }
     });
   },
 
