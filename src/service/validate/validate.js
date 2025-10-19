@@ -16,7 +16,7 @@ const validate = {
     [',', ':', ...esacpedRegexs].forEach((delim) => {
       const regex = new RegExp(`${delim}{2,}`);
       if (regex.test(inputText))
-        throw new Error('[ERROR] 연속된 구분자가 존재합니다');
+        throw new Error(`[ERROR] 연속된 구분자가 존재합니다 ${delim}`);
     });
   },
   isRegexValidError(customRegexs) {
